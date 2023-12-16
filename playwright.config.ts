@@ -29,6 +29,7 @@ const config: PlaywrightTestConfig = {
              ['allure-playwright']],
 
   use: {
+    baseURL: 'https://www.saucedemo.com',
     headless: false,
     screenshot: 'on',
     actionTimeout: 0,

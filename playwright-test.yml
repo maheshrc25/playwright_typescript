@@ -1,0 +1,81 @@
+name: Playwright Tests$(Rev:.r)
+
+# YAML file in the release branch
+schedules:
+- cron: "0 0,4,8,12,16,20 * * *"
+  displayName: Daily build at midnight (Monday-Friday)
+  branches:
+    include:
+    - main
+
+variables: 
+  - group: Sprint
+  - name: sprint numbers for process
+  - name: sendReportToEmailAddress
+    value: 'Mahesh.rc25@gmail..com'
+  
+jobs:
+  - job: test
+    timeoutInMinutes: 120
+    pool:
+      vmImage: "ubuntu-latest"
+ 
+    steps:
+      - task: NodeTool@0
+        inputs:
+          versionSpec: "18.x"
+        displayName: "Install Node.js"
+ 
+      - script: |
+          ls
+          cd swaglab
+          npm ci
+        displayName: "Install dependencies"
+ 
+      - script: |
+          ls
+          cd swaglab  
+          npx playwright install --with-deps
+        displayName: "Install Playwright Browsers"
+ 
+      - script: |
+          ls
+          cd swaglab
+          cd tests
+          
+          xvfb-run npx playwright test --grep '@sanity' --workers 2  --headed --reporter=line,allure-playwright
+        displayName: "Run Sanity"
+        condition: always()
+
+      - script: |
+          ls
+          cd swaglab
+          cd tests
+          
+          xvfb-run npx playwright test --grep '@regression' --workers 2  --headed --reporter=line,allure-playwright
+        displayName: "Run Regression"
+        condition: always()
+
+      - script: |
+          cd swaglab
+          cd tests
+          npx allure generate allure-results -o allure-report
+          echo $(System.DefaultWorkingDirectory)
+        displayName: "Generate Allure Results"  
+        condition: always()
+
+      - task: PublishAllureReport@1
+        displayName: 'Publish Allure Report'
+        inputs:
+          reportDir: '$(System.DefaultWorkingDirectory)/netTrack/tests/allure-report'
+        # always create the artifact, this is useful for debugging failed tests
+        condition: always()
+      
+      #Your build pipeline references an undefined variable named ‘Parameters.ArtifactName’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
+
+      - publish: swaglab_Tests Reports
+        artifact: playwright-report
+        # always create the artifact, this is useful for debugging failed tests
+        condition: always()  
+
+

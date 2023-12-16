@@ -1,0 +1,37 @@
+name: Playwright Tests
+ 
+trigger:
+  - main
+  - master
+ 
+jobs:
+  - job: Playwright
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.33.0-jammy
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 6.0.x
+      - run: dotnet build
+      - name: Ensure browsers are installed
+        run: pwsh bin\Debug\net6.0\playwright.ps1 install --with-deps
+      - script: |
+          ls
+          cd netTrackAutomation
+          cd tests
+          npx playwright test netTrackTest.spec.ts  --headed --reporter=line,allure-playwright
+        displayName: "Run Playwright tests"
+      - script: |
+          cd netTrackAutomation
+          cd tests
+          npx allure generate allure-results -o allure-report --clean
+          echo $(System.DefaultWorkingDirectory)
+        displayName: "Generate Allure Results"  
+ 
+      - publish: netTrackAutomation
+        artifact: playwright-report
+        # always create the artifact, this is useful for debugging failed tests
+        condition: always()  

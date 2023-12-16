@@ -1,0 +1,29 @@
+{
+    
+    "application": {
+        "baseurl": "https://www.saucedemo.com/",
+        "username": "standard_user",
+        "password": "secret_sauce",
+        "email":"Mahesh.rc25@gmail.com",
+        "phone":"9963925395"
+    },
+    "single": { 
+        "first_name": "mahesh",
+        "last_name": "Reddy",
+        "pincode": "522411",
+        "product_1": "Sauce Labs Backpack",
+        "cart_size":"1"
+       
+    },
+    "multiple": {
+        "HomePageTitle": "System Login",
+        "module": "Swag Labs",
+        "mainMenu": "Main Menu",
+        "product_2": "center",
+        "product_3": "center",
+        "cart_size":3
+    },
+    "globla_assert": {
+        "module": "Swag Labs"
+    }
+}    

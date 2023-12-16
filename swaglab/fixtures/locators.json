@@ -1,0 +1,10 @@
+{
+    
+    "login": {
+        "input_username": "#user-name",
+        "input_password": "#password",
+        "login": "#login-button",
+        "loginpage":"#root > div > div.login_logo",
+        "logoff":"#logout_sidebar_link"
+    }
+}    

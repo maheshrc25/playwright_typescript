@@ -1,6 +1,10 @@
 # playwright_typescript
 Playwright test automation 
 
+#Installaion
+a) Install node.js
+b) Download and install the VS Code IDE.
+
 #commands to execute the scripts
 
 Navigate to "Playwright_typescript" folder via cmd and run below commands
